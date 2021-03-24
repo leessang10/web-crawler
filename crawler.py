@@ -37,7 +37,6 @@ driver.find_element_by_id("in_pw").send_keys(login.get("pw"))
 driver.find_element_by_id("loginBtn1").click()
 driver.find_element_by_id("CMCOM07S2Login").click()
 
-
 for row in table:
     company_registration_number = row[0].value
     print("사업자등록번호: ", company_registration_number)
@@ -56,14 +55,22 @@ for row in table:
     driver.find_element_by_xpath("//*[@id=\"side\"]/div[1]/ul/li[3]/ul/li[3]/ul/li[1]/a").click()
     # 2017, 2018, 2019 자산 구하기
     # 2017 항목이 있을 경우만
-    if driver.find_element_by_xpath("//*[@id=\"ENFNS01S0_TABLE\"]/table/thead/tr[1]/th[2]").is_enabled():
-        # 자산 내역 날짜가 2017-12-31인 경우 엑셀에 해당 자산 값 기입
-        if driver.find_element_by_xpath("//*[@id=\"ENFNS01S0_TABLE\"]/table/thead/tr[1]/th[2]").text == "2017-12-31":
-            row[3].value = driver.find_element_by_xpath("//*[@id=\"ENFNS01S0_TABLE\"]/table/tbody/tr[1]/td[1]").text
-        # 자산 내역 날짜가 2018-12-31인 경우 엑셀에 해당 자산 값 기입
-        if driver.find_element_by_xpath("//*[@id=\"ENFNS01S0_TABLE\"]/table/thead/tr[1]/th[3]").text == "2018-12-31":
-            row[4].value = driver.find_element_by_xpath("//*[@id=\"ENFNS01S0_TABLE\"]/table/tbody/tr[1]/td[2]").text
-        # 자산 내역 날짜가 2019-12-31인 경우 엑셀에 해당 자산 값 기입
-        if driver.find_element_by_xpath("//*[@id=\"ENFNS01S0_TABLE\"]/table/thead/tr[1]/th[4]").text == "2019-12-31":
-            row[5].value = driver.find_element_by_xpath("//*[@id=\"ENFNS01S0_TABLE\"]/table/tbody/tr[1]/td[3]").text
-    load_wb.save("C:\\Users\\dawin07\\Documents\\Cretop_Data_Crawler\\data.xlsx")
+    try:
+        if driver.find_element_by_xpath("//*[@id=\"ENFNS01S0_TABLE\"]/table/thead/tr[1]/th[2]").is_enabled():
+            # 자산 내역 날짜가 2017-12-31인 경우 엑셀에 해당 자산 값 기입
+            if driver.find_element_by_xpath(
+                    "//*[@id=\"ENFNS01S0_TABLE\"]/table/thead/tr[1]/th[2]").text == "2017-12-31":
+                row[3].value = driver.find_element_by_xpath("//*[@id=\"ENFNS01S0_TABLE\"]/table/tbody/tr[1]/td[1]").text
+            # 자산 내역 날짜가 2018-12-31인 경우 엑셀에 해당 자산 값 기입
+            if driver.find_element_by_xpath(
+                    "//*[@id=\"ENFNS01S0_TABLE\"]/table/thead/tr[1]/th[3]").text == "2018-12-31":
+                row[4].value = driver.find_element_by_xpath("//*[@id=\"ENFNS01S0_TABLE\"]/table/tbody/tr[1]/td[2]").text
+            # 자산 내역 날짜가 2019-12-31인 경우 엑셀에 해당 자산 값 기입
+            if driver.find_element_by_xpath(
+                    "//*[@id=\"ENFNS01S0_TABLE\"]/table/thead/tr[1]/th[4]").text == "2019-12-31":
+                row[5].value = driver.find_element_by_xpath("//*[@id=\"ENFNS01S0_TABLE\"]/table/tbody/tr[1]/td[3]").text
+    except:
+        print("Error 발생함. 데이터 없음")
+        pass
+    finally:
+        load_wb.save("C:\\Users\\dawin07\\Documents\\Cretop_Data_Crawler\\data.xlsx")
